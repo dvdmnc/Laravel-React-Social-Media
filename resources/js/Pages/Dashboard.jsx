@@ -2,12 +2,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import {useEffect} from 'react'
 import Pagination from '@/Components/Pagination';
+import DrawerComponent from '../Components/Drawer';
 
 export default function Dashboard({ auth, posts, user, success }) {
-    const {data, setData, errors, post, delete:destroy, reset} = useForm({
+    const {data, setData, errors, post, delete:destroy, get, reset} = useForm({
         post_id: null,
         user_id : null,
-        like_id:null
+        like_id:null,
     })
 
     const handleLike = (post_id,user_id) => {
@@ -26,7 +27,7 @@ export default function Dashboard({ auth, posts, user, success }) {
     }
 
     useEffect(()=>{
-        data.post_id != null ? post(route('like.create'),{preserveScroll:true}): null
+        data.post_id != null  ? post(route('like.create'),{preserveScroll:true}): null
     },[data.post_id,data.user_id])
 
     useEffect(()=>{
@@ -59,13 +60,13 @@ export default function Dashboard({ auth, posts, user, success }) {
                                     <div className='flex items-center justify-between'>
                                         <h5><strong>{post.creator.name}</strong></h5>
                                         <div className='flex gap-2'>
-                                            <i>{post.created_at.split('T')[0]} | </i>
-                                            <i>{post.created_at.split('T')[1].split('.')[0]} |</i>
+                                            <i className='hidden sm:block'>{post.created_at.split('T')[0]} | </i>
+                                            <i className='hidden sm:block'>{post.created_at.split('T')[1].split('.')[0]} |</i>
                                             {post.creator.id == user.id && 
                                             <>
                                             <a className='mx-2 flex items-center' href={route('post.edit',post.id)}>
                                                 <img src='/images/crayon-de-couleur.png' width='24' height='24'/>
-                                                <i>Editer</i>
+                                                <i className='hidden sm:block'>Editer</i>
                                             </a>
                                             <button onClick={() => destroy(route('post.delete',post.id))}>
                                                 <img src='/images/supprimer.png' width='24' height='24'/>
@@ -80,11 +81,11 @@ export default function Dashboard({ auth, posts, user, success }) {
                                     {post.path ? (post.path.match(/http|https/) ? <img src={post.path} name='image'/> : <img src={`/${post.path}`} name='image'/>) : null } {/* We have to check if the image is coming from another website or from our local storage because we have to use absolute url for our local storage otherwise the url would be appended to the current url */}
                                     <div className='flex items-center justify-center gap-5'>
                                         {user.likes.find((like) => like.post_id == post.id) ? <button onClick={() => handleDislike(user.likes.find((like) => like.post_id == post.id))}><img src='/images/coeur-plein.png'/></button> : <button onClick={() => handleLike(post.id,user.id)}><img src='/images/coeur.png'/></button>} {/* And that's why we passe a user prop from the controller, because we wouldn't have the likes and the comments with auth*/}
-                                        <button><img src='/images/commenter.png'/></button>
+                                        {/* <button><img src='/images/commenter.png'/></button> */} <DrawerComponent post={post} user={auth.user} image={true}/>
                                         <button><img src='/images/envoyer.png'/></button>
                                     </div>
                                     <strong>{post.likes.length} j'aimes</strong>
-                                    <button><i>Voir les {post.comments.length} commentaires</i></button>
+                                    <DrawerComponent post={post} user={auth.user}/>
                                 </div>
                             ))}
                             <Pagination posts={posts} />

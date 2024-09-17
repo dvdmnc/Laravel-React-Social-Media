@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdatePostRequest;
 use Inertia\Inertia;
+
 use Illuminate\Http\Request;
-use App\Models\Post;
+use App\Http\Requests\UpdatePostRequest;
+use App\Http\Requests\CommentUpdateRequest;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 use App\Models\User;
 use App\Models\Like;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Post;
+use App\Models\Comment;
+
 
 class PostController extends Controller
 {
     public function get(){
-        $posts = Post::with('creator','likes','comments')->orderBy('created_at', 'desc')->paginate(10); //We use the creator function from the post model to get all the information of the user who created the post
+        $posts = Post::with('creator','likes','comments.user')->orderBy('created_at', 'desc')->paginate(10); //We use the creator function from the post model to get all the information of the user who created the post
         $user = User::with('likes','comments','shares')->find(Auth::id());
 
         return Inertia::render('Dashboard', [
@@ -63,7 +69,7 @@ class PostController extends Controller
     public function myPosts(){
         $user_id = Auth::user()->id;
 
-        $posts = Post::with('likes','comments')->where('created_by',$user_id)->orderBy('created_at', 'desc')->get();
+        $posts = Post::with('likes','comments.user')->where('created_by',$user_id)->orderBy('created_at', 'desc')->get();
         $user = User::with('likes','comments','shares')->find(Auth::id());
 
         return Inertia::render('Posts/MyPosts', [
@@ -88,6 +94,25 @@ class PostController extends Controller
 
         return to_route('dashboard')->with('success','La publication à bien été crée');
     }
+
+    //For the comments
+    public function newComment(CommentUpdateRequest $request){
+        $content = $request->validated('content');
+        $post_id = $request->input('post_id');
+        $user_id = $request->input('user_id');
+
+        Comment::create(['post_id'=>$post_id,'user_id'=>$user_id,'content'=>$content]);
+
+        return redirect()->back();
+    }
+
+    public function removeComment($id){
+        Comment::destroy($id);
+
+        return redirect()->back();
+    }
+
+    //For the likes
 
     public function newLike(Request $request){
         $post_id = $request->post('post_id');

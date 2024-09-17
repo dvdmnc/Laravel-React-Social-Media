@@ -28,7 +28,7 @@ const CreatePost = ({auth}) => {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className='p-6 m-4 rounded-md border-2 border-gray-300'>
-                            <form className='flex flex-col gap-5 items-center ' onSubmit={handleSubmit}>
+                            <form className='flex flex-col gap-5 items-center overflow-auto' onSubmit={handleSubmit}>
                                     <div className='flex items-center flex-col'>
                                         <strong><label htmlFor='title'>Titre</label></strong>
                                         <input type='text' className='w-full' value={data.title} onChange={(e) => setData('title',e.target.value)} />
@@ -40,8 +40,8 @@ const CreatePost = ({auth}) => {
                                     </textarea>
                                     {errors.description && <div className='text-red-600 font-semibold'>{errors.description}</div>}
                                     <strong><label htmlFor='image'>Image</label></strong>
-                                    <div>
-                                        <u><label htmlFor='imageChange'>Charger une nouvelle image</label></u>
+                                    <div className='w-full text-center'>
+                                        <u><label htmlFor='imageChange' >Charger une nouvelle image</label></u>
                                         <br></br>
                                         <input type='file' onChange={(e) => setData('path',e.target.files[0])}/>
                                     </div>

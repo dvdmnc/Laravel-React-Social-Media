@@ -62,8 +62,6 @@ export default function Authenticated({ user, header, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
-                                        <Dropdown.Link href={route('myposts')}>Mes publications</Dropdown.Link>
-                                        <Dropdown.Link href={route('post.create')}>Nouveau</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Déconnexion
                                         </Dropdown.Link>
@@ -122,7 +120,7 @@ export default function Authenticated({ user, header, children }) {
                     </div>
                 </div>
             </nav>
-
+            
             {header && (
                 <header className="bg-white shadow">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>

@@ -2,6 +2,8 @@ import React from 'react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import {useEffect} from 'react'
+import DrawerComponent from '../../Components/Drawer';
+
 const MyPosts = ({auth, posts, user}) => {
     const {data, setData, errors, post, delete:destroy, reset} = useForm({
         post_id: null,
@@ -48,31 +50,31 @@ const MyPosts = ({auth, posts, user}) => {
                         <div className='p-6 m-4 rounded-md border-2 border-gray-300'>
                             {posts.length ? posts.map((post) => (
                                  <div className='p-6 m-4 rounded-md border-2 border-gray-300 flex flex-col gap-5' key={post.id}>
-                                 <div className='flex items-center justify-between'>
-                                     <h5><strong>{auth.user.name}</strong></h5>
-                                     <div className='flex gap-2'>
-                                         <i>{post.created_at.split('T')[0]} | </i>
-                                         <i>{post.created_at.split('T')[1].split('.')[0]} |</i>
-                                         <a className='mx-2 flex items-center' href={route('post.edit',post.id)}>
-                                             <img src='/images/crayon-de-couleur.png' width='24' height='24'/>
-                                             <i>Editer</i>
-                                         </a>
-                                         <button onClick={() => destroy(route('post.delete',post.id))}>
-                                             <img src='/images/supprimer.png' width='24' height='24'/>
-                                         </button>
-                                     </div>
-                                 </div>
-                                 <h2>{post.title}</h2>
-                                 <hr></hr>
-                                 <p>{post.description}</p>
-                                 {post.path ? (post.path.match(/http|https/) ? <img src={post.path} name='image'/> : <img src={`/${post.path}`} name='image'/>) : null } {/* We have to check if the image is coming from another website or from our local storage because we have to use absolute url for our local storage otherwise the url would be appended to the current url */}
-                                 <div className='flex items-center justify-center gap-5'>
-                                     {user.likes.find((like) => like.post_id == post.id) ? <button onClick={() => handleDislike(user.likes.find((like) => like.post_id == post.id))}><img src='/images/coeur-plein.png'/></button> : <button onClick={() => handleLike(post.id,user.id)}><img src='/images/coeur.png'/></button>} {/* And that's why we pass a user prop from the controller, because we wouldn't have the likes and the comments with auth*/}
-                                     <button><img src='/images/commenter.png'/></button>
-                                     <button><img src='/images/envoyer.png'/></button>
-                                 </div>
-                                 <strong>{post.likes.length} j'aimes</strong>
-                                 <button><i>Voir les {post.comments.length} commentaires</i></button>
+                                    <div className='flex items-center justify-between'>
+                                        <h5><strong>{auth.user.name}</strong></h5>
+                                        <div className='flex gap-2'>
+                                            <i className='hidden sm:block'>{post.created_at.split('T')[0]} | </i>
+                                            <i className='hidden sm:block'>{post.created_at.split('T')[1].split('.')[0]} |</i>
+                                            <a className='mx-2 flex items-center' href={route('post.edit',post.id)}>
+                                                <img src='/images/crayon-de-couleur.png' width='24' height='24'/>
+                                                <i className='hidden sm:block'>Editer</i>
+                                            </a>
+                                            <button onClick={() => destroy(route('post.delete',post.id))}>
+                                                <img src='/images/supprimer.png' width='24' height='24'/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <h2>{post.title}</h2>
+                                    <hr></hr>
+                                    <p>{post.description}</p>
+                                    {post.path ? (post.path.match(/http|https/) ? <img src={post.path} name='image'/> : <img src={`/${post.path}`} name='image'/>) : null } {/* We have to check if the image is coming from another website or from our local storage because we have to use absolute url for our local storage otherwise the url would be appended to the current url */}
+                                    <div className='flex items-center justify-center gap-5'>
+                                        {user.likes.find((like) => like.post_id == post.id) ? <button onClick={() => handleDislike(user.likes.find((like) => like.post_id == post.id))}><img src='/images/coeur-plein.png'/></button> : <button onClick={() => handleLike(post.id,user.id)}><img src='/images/coeur.png'/></button>} {/* And that's why we pass a user prop from the controller, because we wouldn't have the likes and the comments with auth*/}
+                                        {/* <button><img src='/images/commenter.png'/></button> */} <DrawerComponent post={post} user={auth.user} image={true}/>
+                                        <button><img src='/images/envoyer.png'/></button>
+                                    </div>
+                                    <strong>{post.likes.length} j'aimes</strong>
+                                    <DrawerComponent post={post} user={auth.user}/>
                              </div>
                             )) : <h1>Vous n'avez pas encore publié de contenu</h1>}
                         </div>

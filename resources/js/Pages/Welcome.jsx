@@ -33,6 +33,10 @@ export default function Welcome({ auth }) {
                     )}
                 </nav>
             </header>
+            <main className='text-center mt-[20vh]'>
+                <h1 className='text-5xl font-bold '>Bienvenue sur David Social !</h1>
+                <i>Le réseau social Laravel & React crée par David Menechi</i>
+            </main>
         </>
     );
 }
