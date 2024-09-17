@@ -1,15 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\PostController;
 
-Route::name('like.')->prefix('/like')->group(function (){
+Route::middleware('auth')->name('like.')->prefix('/like')->group(function (){
     Route::post('/new', [PostController::class, 'newLike'])->name('create');
     Route::delete('/remove',[PostController::class, 'removeLike'])->name('remove');
 });
 
-Route::name('post.')->prefix('/post')->group(function() {
+Route::middleware('auth')->name('post.')->prefix('/post')->group(function() {
     Route::get('/edit/{id}',[PostController::class,'edit'])->name('edit');
     Route::get('/create',[PostController::class,'create'])->name('create');
     Route::post('/create',[PostController::class,'create'])->name('create');
@@ -17,4 +16,9 @@ Route::name('post.')->prefix('/post')->group(function() {
     Route::delete('/delete/{id}',[PostController::class,'delete'])->name('delete');
 });
 
-Route::get('/mespublications',[PostController::class,'myPosts'])->name('myposts');
+Route::middleware('auth')->get('/mespublications',[PostController::class,'myPosts'])->name('myposts');
+
+Route::middleware('auth')->name('comments.')->prefix('/comments')->group(function (){
+    Route::post('/new', [PostController::class, 'newComment'])->name('create');
+    Route::delete('/remove/{id}',[PostController::class, 'removeComment'])->name('remove');
+});
