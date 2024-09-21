@@ -130,4 +130,20 @@ class PostController extends Controller
 
         return redirect()->back();
     }
+
+    public function followed(Request $request){
+        $current_user = User::find(Auth::id());
+        $posts = Post::whereIn('created_by', $current_user->followings()->pluck('users.id'))
+        ->with([
+            'creator',  
+            'comments.user',  
+            'likes' 
+        ])
+    ->orderBy('created_at', 'desc')
+    ->paginate(10);  
+
+            return Inertia::render('Posts/Followed', [
+                'posts'=>$posts
+            ]);
+    }
 }

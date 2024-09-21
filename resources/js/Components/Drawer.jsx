@@ -20,7 +20,7 @@ const DrawerComponent = ({user, post, image}) => {
   })
 
   return (
-    <Drawer>
+    <Drawer >
       <DrawerTrigger asChild>
         {image ? <button><img src='/images/commenter.png'/></button> : <button>Voir les {post.comments.length} commentaires</button>}
       </DrawerTrigger>

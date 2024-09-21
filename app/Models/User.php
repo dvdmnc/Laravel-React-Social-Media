@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        'path',
         'password',
     ];
 
@@ -48,6 +49,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function shares(): HasMany
     {
         return $this->hasMany(Share::class);
+    }
+
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
     }
 
     /**

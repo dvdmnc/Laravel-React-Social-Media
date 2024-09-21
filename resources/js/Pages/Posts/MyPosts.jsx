@@ -40,7 +40,7 @@ const MyPosts = ({auth, posts, user}) => {
   return (
     <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Fil d'actualité</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Mes publications</h2>}
         >
             <Head title="Mes publications" />
 

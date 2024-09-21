@@ -24,6 +24,9 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Accueil
                                 </NavLink>
+                                <NavLink href={route('post.followed')} active={route().current('post.followed')}>
+                                    Suivi(e)s
+                                </NavLink>
                                 <NavLink href={route('myposts')} active={route().current('myposts')}>
                                     Mes publications
                                 </NavLink>

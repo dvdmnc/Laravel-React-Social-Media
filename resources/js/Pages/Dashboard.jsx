@@ -40,13 +40,13 @@ export default function Dashboard({ auth, posts, user, success }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Fil d'actualité</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Tous les posts</h2>}
         >
-            <Head title="Mon fil" />
+            <Head title="Tous les posts" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">Bienvenue {auth.user.name} !</div>
                         {success && (
                             <div className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" >
@@ -58,7 +58,10 @@ export default function Dashboard({ auth, posts, user, success }) {
                             {posts && posts.data.map(post => (
                                 <div className='p-6 m-4 rounded-md border-2 border-gray-300 flex flex-col gap-5' key={post.id}>
                                     <div className='flex items-center justify-between'>
-                                        <h5><strong>{post.creator.name}</strong></h5>
+                                        <a href={`/profile/${post.creator.name}`} className={`flex items-center gap-2 ${auth.user.id == post.creator.id ? 'pointer-events-none cursor-default' : null}`}> {/* If the user is hovering on his name, it won't be clickable */}
+                                            {post.creator.path ? <img src={`/${post.creator.path}`} className='rounded-full block max-w-16 max-h-16 w-auto h-auto' /> : null }
+                                            <h5><strong>{post.creator.name}</strong></h5>
+                                        </a>
                                         <div className='flex gap-2'>
                                             <i className='hidden sm:block'>{post.created_at.split('T')[0]} | </i>
                                             <i className='hidden sm:block'>{post.created_at.split('T')[1].split('.')[0]} |</i>
