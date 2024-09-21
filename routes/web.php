@@ -19,7 +19,11 @@ Route::get('/dashboard', [PostController::class,'get'])->middleware(['auth', 've
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/{username}', [ProfileController::class, 'otherUser'])->name('profile.otherUser');
+    Route::post('/profile/follow-{id}', [ProfileController::class, 'follow'])->name('profile.follow');
+    Route::delete('/profile/follow-{id}', [ProfileController::class, 'unfollow'])->name('profile.unfollow');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.image.update'); //Had to use post because patch doesn't work with inertia to send files
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

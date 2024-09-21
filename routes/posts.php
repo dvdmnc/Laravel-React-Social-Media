@@ -11,6 +11,7 @@ Route::middleware('auth')->name('like.')->prefix('/like')->group(function (){
 Route::middleware('auth')->name('post.')->prefix('/post')->group(function() {
     Route::get('/edit/{id}',[PostController::class,'edit'])->name('edit');
     Route::get('/create',[PostController::class,'create'])->name('create');
+    Route::get('/followed',[PostController::class,'followed'])->name('followed');
     Route::post('/create',[PostController::class,'create'])->name('create');
     Route::post('/edit/{id}',[PostController::class,'update'])->name('update');
     Route::delete('/delete/{id}',[PostController::class,'delete'])->name('delete');
